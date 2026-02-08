@@ -1,36 +1,40 @@
-module.exports = {
-  get: function(skuModule) {
-    const priceLists = skuModule.skuPriceList || [];
-    const optionsLists = skuModule.productSKUPropertyList || [];
+const get = ({ priceLists = [], optionsLists = [] }) => {
+  priceLists = priceLists || [];
+  optionsLists = optionsLists || [];
 
-    const options = optionsLists.map(list => {
+  const options = optionsLists.map((list) => {
+    const values = (list.skuPropertyValues || []).map((val) => {
       return {
-        id: list.skuPropertyId,
-        name: list.skuPropertyName,
-        values: list.skuPropertyValues.map(val => {
-          return {
-            id: val.propertyValueId,
-            name: val.propertyValueName,
-            displayName: val.propertyValueDisplayName,
-            image: val.skuPropertyImagePath
-          };
-        })
-      };
-    });
-
-    const lists = priceLists.map(list => {
-      return {
-        skuId: list.skuId,
-        optionValueIds: list.skuPropIds,
-        availableQuantity: list.skuVal.availQuantity,
-        originalPrice: list.skuVal.skuAmount.value,
-        salePrice: list.skuVal.skuActivityAmount.value
+        // Handle both old (propertyValueId) and new (propertyValueIdLong) field names
+        id: val.propertyValueIdLong || val.propertyValueId,
+        name: val.propertyValueName,
+        displayName: val.propertyValueDisplayName,
+        image: val.skuPropertyImagePath,
       };
     });
 
     return {
-      options: options,
-      prices: lists
+      id: list.skuPropertyId,
+      name: list.skuPropertyName,
+      values,
     };
-  }
+  });
+
+  const lists = priceLists.map((list) => {
+    const skuVal = list.skuVal || {};
+    return {
+      skuId: list.skuId,
+      optionValueIds: list.skuPropIds,
+      availableQuantity: skuVal.availQuantity || 0,
+      originalPrice: skuVal.skuAmount || null,
+      salePrice: skuVal.skuActivityAmount || null,
+    };
+  });
+
+  return {
+    options: options,
+    prices: lists,
+  };
 };
+
+export { get };

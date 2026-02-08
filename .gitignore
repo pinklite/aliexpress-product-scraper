@@ -1,3 +1,11 @@
 node_modules
 .DS_Store
 .idea
+.codex
+.pnpm-store
+
+# Debug/test artifacts
+debug-screenshot.png
+product.json
+api-response.json
+output.json

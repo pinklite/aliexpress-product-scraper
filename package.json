@@ -1,10 +1,20 @@
 {
   "name": "aliexpress-product-scraper",
-  "version": "1.0.5",
+  "version": "3.0.0",
   "description": "Get Aliexpress product details as a json reponse including feedbacks, variants, description, images, etc.,",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "smoke": "node ./scripts/smoke.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix"
+    ]
   },
   "keywords": [
     "aliexpress",
@@ -26,10 +36,21 @@
   ],
   "author": "Sudheer Ranga",
   "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.3",
-    "faker": "^4.1.0",
-    "node-fetch": "^2.6.0",
-    "puppeteer": "^3.0.0"
+    "@faker-js/faker": "10.2.0",
+    "cheerio": "1.1.2",
+    "node-fetch": "3.3.2",
+    "puppeteer": "24.34.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
   }
 }
